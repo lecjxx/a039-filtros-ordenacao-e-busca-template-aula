@@ -3,6 +3,8 @@ import pokemons from "./pokemon/pokemon.json";
 import PokemonCard from "./components/PokemonCard/PokemonCard";
 import { getColors } from "./utils/ReturnCardColor";
 import Header from "./components/Header/Header.js";
+import { useState } from "react";
+
 const GlobalStyle = createGlobalStyle`
   *{
     padding: 0;
@@ -18,18 +20,59 @@ const CardsContainer = styled.div`
   justify-items: center;
 `;
 function App() {
+
+  const [id, setId] = useState ("")
+  const [name, setName] = useState ("")
+
   return (
     <>
       <GlobalStyle />
-      <Header />
+      <Header 
+      id={id} setId={setId} 
+      name={name} setName={setName}/>
+
       <CardsContainer>
-        {pokemons.map((pokemon) => {
+
+
+        {/* {pokemons.filter((pokemon) => {
+          //console.log(pokemon.id);
+          if(pokemon.id === id){
+            return pokemon
+          }
+        })} */}
+
+{pokemons.filter((pokemon) => {
+  return pokemon.id.includes(id)
+}).filter((pokemon) => {
+  return pokemon.name.english.toLowerCase().includes(name.toLowerCase())
+}).map((pokemon) => {
+  return <PokemonCard
+  cardColor={getColors(pokemon.type[0])}
+  key={pokemon.id}
+  pokemon={pokemon}
+/>
+})}
+
+
+{/* {pokemons.filter((pokemon) => {
+  return pokemon.name.english.toLocaleUpperCase().includes(name.toLowerCase())
+}).map((pokemon) => {
+  return <PokemonCard
+  cardColor={getColors(pokemon.type[0])}
+  key={pokemon.name}
+  pokemon={pokemon}
+/>
+})} */}
+
+
+        {/* {pokemons.map((pokemon) => {
           return <PokemonCard
           cardColor={getColors(pokemon.type[0])}
           key={pokemon.id}
           pokemon={pokemon}
         />
-        })}
+        })} */}
+
       </CardsContainer>
     </>
   );
